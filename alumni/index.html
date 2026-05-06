@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#171e2e">
+
+<title>DAI 4.0 · Invitation</title>
+
+<!-- Open Graph — for Line preview -->
+<meta property="og:title" content="DAI 4.0 · A New Chapter">
+<meta property="og:description" content="you're included.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Noto+Sans+TC:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    min-height: 100vh;
+    overscroll-behavior: none;
+  }
+  body {
+    background: #171e2e;
+    font-family: 'Inter', 'Noto Sans TC', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+
+  /* ===== CURTAIN · "Gallery lights coming on" ===== */
+  .curtain {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: background 1.2s ease, opacity 1.6s ease;
+    animation: room-light 1.8s ease 0.3s forwards;
+  }
+  @keyframes room-light {
+    0% { background: #000; }
+    100% { background: #171e2e; }
+  }
+  .curtain.gone {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Spotlight from above */
+  .spotlight {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 360px 480px at 50% 46%,
+        rgba(168,176,187,0.14) 0%,
+        rgba(168,176,187,0.06) 35%,
+        transparent 65%);
+    opacity: 0;
+    animation: spot-up 2.2s ease 1.0s forwards;
+    pointer-events: none;
+  }
+  @keyframes spot-up {
+    to { opacity: 1; }
+  }
+
+  /* Mark in curtain — smaller, perfectly centered */
+  .reveal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    position: relative;
+    z-index: 2;
+    animation: light-up 2.4s ease 1.6s forwards;
+  }
+  @keyframes light-up {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  .curtain-mark {
+    width: 200px;  /* smaller than card's ~370px */
+    margin-bottom: 36px;
+  }
+  .curtain-mark svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .curtain-tag {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 18px;
+    color: rgba(232,230,220,0.8);
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .curtain-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    color: #5c86d6;
+    text-align: center;
+  }
+
+  /* Hide old/unused */
+  .lone-dot, .lone-hint, .ripple, .trail, .curtain-cta, .reveal-spacer { display: none; }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.85; }
+  }
+
+
+  /* ===== CARD ===== */
+  .page {
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 1.4s ease 0.2s;
+  }
+  .page.in {
+    opacity: 1;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 440px;
+    aspect-ratio: 9/16;
+    background: #a8b0bb;
+    color: #171e2e;
+    padding: 40px 34px 34px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    border-radius: 2px;
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    color: #3a4356;
+  }
+  .card-top .dot {
+    display: inline-block;
+    width: 5px; height: 5px;
+    background: #5c86d6;
+    border-radius: 50%;
+    margin-right: 7px;
+    vertical-align: middle;
+  }
+
+  .card-middle {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px 0;
+  }
+
+  .hero-wrap {
+    margin-bottom: 44px;
+  }
+  .hero-wrap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Mark blocks — no animation in curtain; hero-wrap in card scales into place */
+  .mark-block { transform-origin: center; }
+  .mark-text { /* static */ }
+  .mark-dot { transform-origin: 188px 136px; }
+
+  /* When page comes in, hero-wrap does a subtle "settling in" */
+  .page .hero-wrap {
+    transform-origin: center;
+    transform: scale(0.88) translateY(-28px);
+    opacity: 0;
+    transition:
+      transform 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 1.2s ease;
+  }
+  .page.in .hero-wrap {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+
+  .text-block {
+    text-align: left;
+  }
+  .text-block > * {
+    opacity: 0;
+    animation: lineIn 0.9s ease forwards;
+  }
+  .text-block > *:nth-child(1) { animation-delay: 2.3s; }
+  .text-block > *:nth-child(2) { animation-delay: 2.55s; }
+  .text-block > *:nth-child(3) { animation-delay: 2.8s; }
+  @keyframes lineIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .text-block .medium {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    line-height: 1.45;
+    color: #171e2e;
+  }
+  .text-block .italic {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 19px;
+    letter-spacing: -0.005em;
+    line-height: 1.4;
+    color: #3a4356;
+  }
+  .text-block .plus {
+    color: #5c86d6;
+    font-weight: 400;
+    padding: 0 0.06em;
+  }
+
+
+  .info-strip {
+    padding-top: 14px;
+    border-top: 0.5px solid rgba(15,22,32,0.25);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.22em;
+    opacity: 0;
+    animation: lineIn 0.9s ease 3.2s forwards;
+  }
+  .info-strip .cell .k {
+    display: block;
+    font-size: 8px;
+    margin-bottom: 5px;
+    letter-spacing: 0.3em;
+    color: #5a6470;
+  }
+  .info-strip .cell .v {
+    font-weight: 500;
+    color: #171e2e;
+  }
+
+
+  /* ===== ACTIONS ===== */
+  .actions {
+    max-width: 440px;
+    width: 100%;
+    margin: 24px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    animation: lineIn 1s ease 3.6s forwards;
+  }
+  .action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: rgba(232,230,220,0.05);
+    border: 1px solid rgba(232,230,220,0.15);
+    border-radius: 2px;
+    color: #a8b0bb;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .action:active,
+  .action:hover {
+    background: rgba(92,134,214,0.12);
+    border-color: rgba(92,134,214,0.4);
+  }
+  .action .label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .action .label::before {
+    content: '';
+    display: inline-block;
+    width: 5px; height: 5px;
+    background: #5c86d6;
+    border-radius: 50%;
+  }
+  .action .arrow {
+    font-size: 16px;
+    opacity: 0.6;
+  }
+
+
+  /* ===== SIGN-OFF ===== */
+  .signoff {
+    max-width: 440px;
+    width: 100%;
+    margin: 40px auto 20px;
+    text-align: center;
+    color: rgba(232,230,220,0.45);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 13px;
+    opacity: 0;
+    animation: lineIn 1s ease 4.0s forwards;
+  }
+  .signoff .mono {
+    display: block;
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: rgba(232,230,220,0.3);
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== SVG DEFS (painted filter) — must be before curtain ===== -->
+<svg style="position:absolute;width:0;height:0" aria-hidden="true">
+  <defs>
+    <filter id="painted" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="5" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="3.8"/>
+    </filter>
+    <filter id="painted-dot" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="2" seed="11" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="2.5"/>
+    </filter>
+  </defs>
+</svg>
+
+
+<!-- ===== CURTAIN · gallery lights ===== -->
+<div class="curtain" id="curtain">
+
+  <!-- spotlight from above -->
+  <div class="spotlight"></div>
+
+  <!-- small mark centered, with meta -->
+  <div class="reveal-content">
+    <div class="curtain-mark">
+      <svg viewBox="0 0 320 200">
+        <g filter="url(#painted)">
+          <path d="M 18 18 L 228 22 L 226 72 L 16 68 Z" fill="#3a4356"/>
+        </g>
+        <text x="122" y="57" text-anchor="middle"
+              fill="#a8b0bb" font-family="Inter, sans-serif"
+              font-weight="300" font-size="30" letter-spacing="12">D A I</text>
+
+        <g filter="url(#painted)">
+          <path d="M 68 82 L 305 88 L 302 168 L 66 162 Z" fill="#3a4356"/>
+        </g>
+        <text x="130" y="140"
+              fill="#a8b0bb" font-family="Inter, sans-serif"
+              font-weight="300" font-size="54">4</text>
+        <g filter="url(#painted-dot)">
+          <circle cx="188" cy="136" r="5.5" fill="#5c86d6"/>
+        </g>
+        <text x="200" y="140"
+              fill="#a8b0bb" font-family="Inter, sans-serif"
+              font-weight="300" font-size="54">0</text>
+      </svg>
+    </div>
+    <div class="curtain-tag">the new chapter</div>
+    <div class="curtain-title">YOU'RE INCLUDED</div>
+  </div>
+
+</div>
+
+
+<!-- ===== PAGE ===== -->
+<div class="page" id="page">
+
+  <div class="card">
+    <div class="card-top">
+      <span><span class="dot"></span>I · OF · III</span>
+      <span>06.14.2026</span>
+    </div>
+
+    <div class="card-middle">
+      <div class="hero-wrap">
+        <svg viewBox="0 0 320 200">
+          <g filter="url(#painted)" class="mark-block block-1">
+            <path d="M 18 18 L 228 22 L 226 72 L 16 68 Z" fill="#171e2e"/>
+          </g>
+          <text class="mark-text t-dai" x="122" y="57" text-anchor="middle"
+                fill="#a8b0bb" font-family="Inter, sans-serif"
+                font-weight="300" font-size="30" letter-spacing="12">D A I</text>
+
+          <g filter="url(#painted)" class="mark-block block-2">
+            <path d="M 68 82 L 305 88 L 302 168 L 66 162 Z" fill="#171e2e"/>
+          </g>
+          <text class="mark-text t-4" x="130" y="140"
+                fill="#a8b0bb" font-family="Inter, sans-serif"
+                font-weight="300" font-size="54">4</text>
+          <g class="mark-dot" filter="url(#painted-dot)">
+            <circle cx="188" cy="136" r="5.5" fill="#5c86d6"/>
+          </g>
+          <text class="mark-text t-0" x="200" y="140"
+                fill="#a8b0bb" font-family="Inter, sans-serif"
+                font-weight="300" font-size="54">0</text>
+        </svg>
+      </div>
+
+      <div class="text-block">
+        <div class="medium">old friends,</div>
+            <div class="italic">new home,</div>
+            <div class="medium">20<span class="plus">+</span>20 and more.</div>
+      </div>
+    </div>
+
+    <div class="info-strip">
+      <div class="cell"><span class="k">WHEN</span><span class="v">06.14 · 17:30</span></div>
+      <div class="cell"><span class="k">WHERE</span><span class="v">THE GREEN HOUSE</span></div>
+      <div class="cell"><span class="k">DRESS</span><span class="v">WHITE · GREY</span></div>
+    </div>
+  </div>
+
+
+  <!-- ACTIONS -->
+  <div class="actions">
+    <a href="data:text/calendar;charset=utf-8,BEGIN%3AVCALENDAR%0D%0AVERSION%3A2.0%0D%0APRODID%3A-%2F%2FDAI4.0%2F%2FInvitation%2F%2FEN%0D%0ABEGIN%3AVEVENT%0D%0AUID%3Adai40-alumni-20260614%40dai4.0%0D%0ADTSTAMP%3A20260401T000000Z%0D%0ADTSTART%3A20260614T093000Z%0D%0ADTEND%3A20260614T133000Z%0D%0ASUMMARY%3ADAI%204.0%20%C2%B7%20Old%20Friends%20%C2%B7%20New%20Home%0D%0ALOCATION%3AThe%20Green%20House%20%C2%B7%20%E5%8F%B0%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8C%97%E8%B7%AF%E4%B8%89%E6%AE%B553%E8%99%9F%0D%0AEND%3AVEVENT%0D%0AEND%3AVCALENDAR" class="action" id="addCal">
+      <span class="label">ADD TO CALENDAR</span>
+      <span class="arrow">→</span>
+    </a>
+    <a href="https://maps.apple.com/?q=%E5%8F%B0%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8C%97%E8%B7%AF%E4%B8%89%E6%AE%B553%E8%99%9F" target="_blank" rel="noopener" class="action">
+      <span class="label">OPEN IN MAPS</span>
+      <span class="arrow">→</span>
+    </a>
+    <a href="https://forms.gle/REPLACE_WITH_ALUMNI_FORM_LINK" target="_blank" rel="noopener" class="action" id="rsvp">
+      <span class="label">RSVP</span>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+
+
+  <!-- SIGN-OFF -->
+  <div class="signoff">
+    looking forward to seeing you.
+    <span class="mono">— DAI 4.0</span>
+  </div>
+</div>
+
+
+<script>
+  const curtain = document.getElementById('curtain');
+  const page = document.getElementById('page');
+  let dismissed = false;
+
+  function dismissCurtain() {
+    if (dismissed) return;
+    dismissed = true;
+    curtain.classList.add('gone');
+    page.classList.add('in');
+  }
+
+  curtain.addEventListener('click', dismissCurtain);
+  curtain.addEventListener('touchend', (e) => { e.preventDefault(); dismissCurtain(); });
+
+  // Auto-dismiss after gallery lights have lit and viewer has seen the work
+  setTimeout(dismissCurtain, 5200);
+
+
+  // (RSVP button is a real link now — opens Google Form in new tab)
+</script>
+
+</body>
+</html>
